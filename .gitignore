@@ -1,3 +1,6 @@
+.idea
+.vscode
+
 # Environment Configuration
 .env
 .env.*
