@@ -1,5 +1,5 @@
-import {DeliveryMethod} from "@shopify/shopify-api";
-import {WebhookHandlersParam} from "@shopify/shopify-app-express/build/ts/webhooks/types";
+import { DeliveryMethod } from "@shopify/shopify-api";
+import { WebhookHandlersParam } from "@shopify/shopify-app-express/build/ts/webhooks/types";
 
 const GDPRWebhookHandlers: WebhookHandlersParam = {
   /**
