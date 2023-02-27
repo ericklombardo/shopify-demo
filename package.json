@@ -13,10 +13,15 @@
   },
   "dependencies": {
     "@shopify/app": "3.44.1",
-    "@shopify/cli": "3.44.1"
+    "@shopify/checkout-ui-extensions-react": "^0.24.0",
+    "@shopify/cli": "3.44.1",
+    "react": "^17.0.2"
   },
   "author": "lombardo",
   "volta": {
     "node": "18.14.2"
+  },
+  "overrides": {
+    "@types/react": "17.0.30"
   }
 }
