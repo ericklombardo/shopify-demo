@@ -1,7 +1,7 @@
 {
   "name": "thank-you-msgs",
   "version": "1.0.0",
-  "main": "web/index.js",
+  "main": "web/backend/index.js",
   "license": "UNLICENSED",
   "scripts": {
     "shopify": "shopify",
