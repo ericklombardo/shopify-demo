@@ -8,11 +8,14 @@ import {
 } from "@shopify/polaris";
 import { Toast } from "@shopify/app-bridge-react";
 import { useAppQuery, useAuthenticatedFetch } from "../hooks";
+import {Props as ToastProps} from "@shopify/app-bridge-react/components/Toast/Toast";
+
+type ProductToastProps = Omit<ToastProps, "onDismiss">;
 
 export function ProductsCard() {
-  const emptyToastProps = { content: null };
+  const emptyToastProps: ProductToastProps = { content: null };
   const [isLoading, setIsLoading] = useState(true);
-  const [toastProps, setToastProps] = useState(emptyToastProps);
+  const [toastProps, setToastProps] = useState<ProductToastProps>(emptyToastProps);
   const fetch = useAuthenticatedFetch();
 
   const {

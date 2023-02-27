@@ -1,6 +1,12 @@
 import { useAuthenticatedFetch } from "./useAuthenticatedFetch";
 import { useMemo } from "react";
-import { useQuery } from "react-query";
+import { useQuery} from "react-query";
+
+interface UseAppQueryOptions {
+  url: string;
+  fetchInit?: Record<string, any>;
+  reactQueryOptions: Record<string, any>;
+}
 
 /**
  * A hook for querying your custom app data.
@@ -14,7 +20,7 @@ import { useQuery } from "react-query";
  *
  * @returns Return value of useQuery.  See: https://react-query.tanstack.com/reference/useQuery.
  */
-export const useAppQuery = ({ url, fetchInit = {}, reactQueryOptions }) => {
+export const useAppQuery = ({ url, fetchInit = {}, reactQueryOptions }: UseAppQueryOptions) => {
   const authenticatedFetch = useAuthenticatedFetch();
   const fetch = useMemo(() => {
     return async () => {
