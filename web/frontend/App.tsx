@@ -22,7 +22,7 @@ export default function App() {
               navigationLinks={[
                 {
                   label: "Add new message",
-                  destination: "/pagename",
+                  destination: "/messages/new",
                 },
               ]}
             />

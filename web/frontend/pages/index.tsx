@@ -13,7 +13,7 @@ import {
 } from "@shopify/polaris";
 import { TitleBar, Loading, useNavigate } from "@shopify/app-bridge-react";
 
-const LoadingElement = (): JSX.Element =>  (
+const LoadingElement = (): JSX.Element => (
   <Card sectioned>
     <Loading />
     <SkeletonBodyText />
@@ -22,7 +22,7 @@ const LoadingElement = (): JSX.Element =>  (
 
 const EmptyStateElement = (): JSX.Element => {
   const navigate = useNavigate();
-  return  (
+  return (
     <Card sectioned>
       <EmptyState
         heading="Add new message"
@@ -33,7 +33,8 @@ const EmptyStateElement = (): JSX.Element => {
         image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
       >
         <p>
-          Allow add new <strong>thank you messages</strong> for displaying in the order confirmation page.
+          Allow add new <strong>thank you messages</strong> for displaying in
+          the order confirmation page.
         </p>
       </EmptyState>
     </Card>
@@ -41,7 +42,6 @@ const EmptyStateElement = (): JSX.Element => {
 };
 
 export default function HomePage(): JSX.Element {
-
   const navigate = useNavigate();
 
   /*
