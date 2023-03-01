@@ -4,6 +4,7 @@ import {
   Card,
   Form,
   FormLayout,
+  InlineError,
   TextField,
   Button,
   ChoiceList,
@@ -29,6 +30,7 @@ import {
   FormMapping,
   Field,
 } from "@shopify/react-form/build/ts";
+import { HtmlEditor } from "./HtmlEditor";
 
 const NO_DISCOUNT_OPTION = { label: "No discount", value: "" };
 
@@ -38,11 +40,11 @@ export const MessageForm = (props: any): JSX.Element => {
   const { message: initialMessage } = props;
 
   const [message, setMessage] = useState(initialMessage);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const appBridge = useAppBridge();
   const fetch = useAuthenticatedFetch();
-  const deletedProduct = message?.description === "Deleted product";
 
   const onSubmit: SubmitHandler<
     FormMapping<{ description: Field<any> }, "value">
@@ -54,17 +56,15 @@ export const MessageForm = (props: any): JSX.Element => {
   const isDeleting = false;
   const deleteMessage = () => console.log("delete");
 
-  const {
-    fields: { description },
-    dirty,
-    reset,
-    submitting,
-    submit,
-    makeClean,
-  } = useForm({
+  const onChangeMessage = (content: string) => {
+    setMessage({ ...message, description: content });
+    setIsDirty(true);
+  };
+
+  const { reset, submitting, submit } = useForm({
     fields: {
       description: useField({
-        value: message?.title || "",
+        value: message?.description || "",
         validates: [notEmptyString("Please enter the message description")],
       }),
     },
@@ -73,17 +73,6 @@ export const MessageForm = (props: any): JSX.Element => {
 
   return (
     <Stack vertical>
-      {deletedProduct && (
-        <Banner
-          title="The product for this QR code no longer exists."
-          status="critical"
-        >
-          <p>
-            Scans will be directed to a 404 page, or you can choose another
-            product for this QR code.
-          </p>
-        </Banner>
-      )}
       <Layout>
         <Layout.Section>
           <Form onSubmit={submit}>
@@ -98,17 +87,17 @@ export const MessageForm = (props: any): JSX.Element => {
                 loading: submitting,
                 disabled: submitting,
               }}
-              visible={dirty}
+              visible={isDirty}
               fullWidth
             />
             <FormLayout>
               <Card sectioned title="Description">
-                <TextField
-                  {...description}
-                  autoComplete="off"
-                  label="Description"
-                  labelHidden
-                  helpText="This is the description of the message that will be displayed in the order confirmation page."
+                <HtmlEditor
+                  maxCharCount={50}
+                  onChange={onChangeMessage}
+                  errorMessage="Please enter the message description"
+                  required
+                  defaultValue={initialMessage?.description ?? ""}
                 />
               </Card>
             </FormLayout>

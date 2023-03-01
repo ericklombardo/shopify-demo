@@ -25,6 +25,7 @@
     "react-dom": "^17.0.2",
     "react-query": "^3.34.19",
     "react-router-dom": "^6.3.0",
+    "suneditor": "^2.44.3",
     "vite": "^4.1.4"
   },
   "devDependencies": {
