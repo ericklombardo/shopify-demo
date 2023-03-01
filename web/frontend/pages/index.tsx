@@ -5,13 +5,10 @@ import {
   EmptyState,
   SkeletonBodyText,
   Layout,
-  TextContainer,
-  Image,
-  Stack,
-  Link,
-  Heading,
 } from "@shopify/polaris";
 import { TitleBar, Loading, useNavigate } from "@shopify/app-bridge-react";
+import { Message, MessageList } from "../components";
+import dayjs from "dayjs";
 
 const LoadingElement = (): JSX.Element => (
   <Card sectioned>
@@ -47,9 +44,35 @@ export default function HomePage(): JSX.Element {
   /*
     These are mock values. Setting these values lets you preview the loading markup and the empty state.
   */
-  const isLoading = true;
+  const isLoading = false;
   const isRefetching = false;
-  const messages = [];
+  const messages: Message[] = [
+    {
+      id: 1,
+      description: "<p><strong>Thank you for your order 1</strong></p>",
+      createdAt: dayjs().add(-1, "day").toDate(),
+    },
+    {
+      id: 2,
+      description: "<p>Thank you for your order 2</p>",
+      createdAt: dayjs().add(-2, "day").toDate(),
+    },
+    {
+      id: 3,
+      description: "<p>Thank you for your order 3</p>",
+      createdAt: dayjs().add(-3, "day").toDate(),
+    },
+    {
+      id: 4,
+      description: "<p>Thank you for your order 4</p>",
+      createdAt: new Date(),
+    },
+    {
+      id: 5,
+      description: "Thank you for your order 5",
+      createdAt: dayjs().add(1, "day").toDate(),
+    },
+  ];
 
   return (
     <Page>
@@ -63,6 +86,9 @@ export default function HomePage(): JSX.Element {
       <Layout>
         <Layout.Section>
           {isLoading && <LoadingElement />}
+          {messages.length && (
+            <MessageList messages={messages} loading={isRefetching} />
+          )}
           {!isLoading && !messages.length && <EmptyStateElement />}
         </Layout.Section>
       </Layout>

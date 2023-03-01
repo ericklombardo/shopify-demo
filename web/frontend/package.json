@@ -18,9 +18,11 @@
     "@shopify/app-bridge": "^3.1.0",
     "@shopify/app-bridge-react": "^3.1.0",
     "@shopify/app-bridge-utils": "^3.1.0",
-    "@shopify/polaris": "^9.11.0",
+    "@shopify/polaris": "^10.32.0",
     "@shopify/react-form": "^2.5.0",
     "@vitejs/plugin-react": "1.2.0",
+    "dayjs": "^1.11.7",
+    "dompurify": "^3.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-query": "^3.34.19",
@@ -29,6 +31,7 @@
     "vite": "^4.1.4"
   },
   "devDependencies": {
+    "@types/dompurify": "^2.4.0",
     "@types/node": "^18.14.2",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

@@ -1,14 +1,15 @@
 import { Card, Page, Layout, SkeletonBodyText } from "@shopify/polaris";
 import { Loading, TitleBar } from "@shopify/app-bridge-react";
-import { MessageForm } from "../../components";
+import { MessageForm, Message } from "../../components";
 
 export default function EditMessage() {
   const breadcrumbs = [{ content: "Messages", url: "/" }];
 
   const isLoading = false;
   const isRefetching = false;
-  const message = {
-    createdAt: "2022-06-13",
+  const message: Message = {
+    id: 1,
+    createdAt: new Date(),
     description: "My first message",
   };
 
