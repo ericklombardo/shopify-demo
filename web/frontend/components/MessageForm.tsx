@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Banner,
   Card,
@@ -30,25 +30,26 @@ import {
   FormMapping,
   Field,
 } from "@shopify/react-form/build/ts";
-import { HtmlEditor } from "./HtmlEditor";
+import { EditorRef, HtmlEditor } from "./HtmlEditor";
 
-const NO_DISCOUNT_OPTION = { label: "No discount", value: "" };
+interface Message {
+  description: string;
+}
 
-const DISCOUNT_CODES = {};
-
-export const MessageForm = (props: any): JSX.Element => {
+export const MessageForm = (props: { message: Message }): JSX.Element => {
   const { message: initialMessage } = props;
 
-  const [message, setMessage] = useState(initialMessage);
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const [message, setMessage] = useState<Message>(initialMessage);
+  const editorRef = useRef<EditorRef>();
+  const maxCharCount = useRef<number>(50);
 
   const navigate = useNavigate();
   const appBridge = useAppBridge();
   const fetch = useAuthenticatedFetch();
 
   const onSubmit: SubmitHandler<
-    FormMapping<{ description: Field<any> }, "value">
-  > = (body: any) => {
+    FormMapping<{ description: Field<string> }, "value">
+  > = (body: Message) => {
     console.log("submit", body);
     return Promise.resolve({ status: "success" });
   };
@@ -56,16 +57,22 @@ export const MessageForm = (props: any): JSX.Element => {
   const isDeleting = false;
   const deleteMessage = () => console.log("delete");
 
-  const onChangeMessage = (content: string) => {
-    setMessage({ ...message, description: content });
-    setIsDirty(true);
-  };
-
-  const { reset, submitting, submit } = useForm({
+  const {
+    reset,
+    submitting,
+    submit,
+    dirty,
+    fields: { description },
+  } = useForm({
     fields: {
       description: useField({
         value: message?.description || "",
-        validates: [notEmptyString("Please enter the message description")],
+        validates: [
+          () =>
+            !editorRef.current || editorRef.current.isEmpty()
+              ? "Please enter a description"
+              : undefined,
+        ],
       }),
     },
     onSubmit,
@@ -87,17 +94,15 @@ export const MessageForm = (props: any): JSX.Element => {
                 loading: submitting,
                 disabled: submitting,
               }}
-              visible={isDirty}
+              visible={dirty}
               fullWidth
             />
             <FormLayout>
               <Card sectioned title="Description">
                 <HtmlEditor
-                  maxCharCount={50}
-                  onChange={onChangeMessage}
-                  errorMessage="Please enter the message description"
-                  required
-                  defaultValue={initialMessage?.description ?? ""}
+                  ref={editorRef}
+                  maxCharCount={maxCharCount.current}
+                  {...description}
                 />
               </Card>
             </FormLayout>
