@@ -1,14 +1,6 @@
-import { useNavigate } from "@shopify/app-bridge-react";
-import {
-  IndexTable,
-  LegacyCard,
-  Button,
-  ButtonGroup,
-  Text,
-} from "@shopify/polaris";
+import { IndexTable, LegacyCard } from "@shopify/polaris";
 import { Message } from "./MessageForm";
-import dayjs from "dayjs";
-import { HtmlViewer } from "./HtmlViewer";
+import { MessageListItem } from "./MessageListItem";
 
 export interface MessagesListProps {
   messages: Message[];
@@ -17,36 +9,15 @@ export interface MessagesListProps {
 
 export const MessageList = (props: MessagesListProps): JSX.Element => {
   const { messages, loading } = props;
+  const resourceName = { singular: "message", plural: "messages" };
 
-  const navigate = useNavigate();
-  const resourceName = {
-    singular: "Message",
-    plural: "Messages",
-  };
-
-  const rowMarkup = messages.map(({ id, description, createdAt }, index) => (
-    <IndexTable.Row id={String(id)} key={id} position={index}>
-      <IndexTable.Cell>
-        <HtmlViewer html={description} />
-      </IndexTable.Cell>
-      <IndexTable.Cell>
-        {dayjs(createdAt).format("MMMM D, YYYY")}
-      </IndexTable.Cell>
-      <IndexTable.Cell>
-        <ButtonGroup>
-          <Button
-            size="slim"
-            destructive
-            onClick={() => console.log("deleted")}
-          >
-            Delete
-          </Button>
-          <Button size="slim" onClick={() => navigate(`/messages/${id}`)}>
-            Edit
-          </Button>
-        </ButtonGroup>
-      </IndexTable.Cell>
-    </IndexTable.Row>
+  const renderRows = messages.map(({ id, description, createdAt }) => (
+    <MessageListItem
+      id={id}
+      description={description}
+      createdAt={createdAt}
+      key={id}
+    />
   ));
 
   return (
@@ -62,7 +33,7 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
         selectable={false}
         loading={loading}
       >
-        {rowMarkup}
+        {renderRows}
       </IndexTable>
     </LegacyCard>
   );
