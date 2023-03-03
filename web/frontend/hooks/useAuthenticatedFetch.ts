@@ -1,7 +1,7 @@
 import { authenticatedFetch } from "@shopify/app-bridge-utils";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { Redirect } from "@shopify/app-bridge/actions";
-import {ClientApplication} from "@shopify/app-bridge";
+import { ClientApplication } from "@shopify/app-bridge";
 
 /**
  * A hook that returns an auth-aware fetch function.
@@ -26,7 +26,10 @@ export function useAuthenticatedFetch() {
   };
 }
 
-function checkHeadersForReauthorization(headers: Headers, app:  ClientApplication) {
+function checkHeadersForReauthorization(
+  headers: Headers,
+  app: ClientApplication
+) {
   if (headers.get("X-Shopify-API-Request-Failure-Reauthorize") === "1") {
     const authUrlHeader =
       headers.get("X-Shopify-API-Request-Failure-Reauthorize-Url") ||

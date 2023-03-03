@@ -1,11 +1,11 @@
 import { useAuthenticatedFetch } from "./useAuthenticatedFetch";
 import { useMemo } from "react";
-import { useQuery} from "react-query";
+import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 
-interface UseAppQueryOptions {
+interface UseAppQueryOptions<T> {
   url: string;
-  fetchInit?: Record<string, any>;
-  reactQueryOptions: Record<string, any>;
+  fetchInit?: RequestInit;
+  reactQueryOptions: UseQueryOptions<T>;
 }
 
 /**
@@ -20,7 +20,11 @@ interface UseAppQueryOptions {
  *
  * @returns Return value of useQuery.  See: https://react-query.tanstack.com/reference/useQuery.
  */
-export const useAppQuery = ({ url, fetchInit = {}, reactQueryOptions }: UseAppQueryOptions) => {
+export const useAppQuery = <T>({
+  url,
+  fetchInit = {},
+  reactQueryOptions,
+}: UseAppQueryOptions<T>): UseQueryResult<T> => {
   const authenticatedFetch = useAuthenticatedFetch();
   const fetch = useMemo(() => {
     return async () => {
@@ -29,7 +33,7 @@ export const useAppQuery = ({ url, fetchInit = {}, reactQueryOptions }: UseAppQu
     };
   }, [url, JSON.stringify(fetchInit)]);
 
-  return useQuery(url, fetch, {
+  return useQuery<T>(url, fetch, {
     ...reactQueryOptions,
     refetchOnWindowFocus: false,
   });
