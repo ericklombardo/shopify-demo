@@ -1,17 +1,25 @@
 import { Card, Page, Layout, SkeletonBodyText } from "@shopify/polaris";
 import { Loading, TitleBar } from "@shopify/app-bridge-react";
-import { MessageForm, Message } from "../../components";
+import { MessageForm } from "../../components";
+import { Message } from "../../../@types/message";
+import { useParams } from "react-router-dom";
+import { useAppQuery } from "../../hooks";
 
 export default function EditMessage() {
   const breadcrumbs = [{ content: "Messages", url: "/" }];
 
-  const isLoading = false;
-  const isRefetching = false;
-  const message: Message = {
-    id: 1,
-    createdAt: new Date(),
-    description: "My first message",
-  };
+  const { id } = useParams();
+
+  const {
+    data: message,
+    isLoading,
+    isRefetching,
+  } = useAppQuery<Message>({
+    url: `/api/messages/${id}`,
+    reactQueryOptions: {
+      refetchOnReconnect: false,
+    },
+  });
 
   if (isLoading || isRefetching) {
     return (
