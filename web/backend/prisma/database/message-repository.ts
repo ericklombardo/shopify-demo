@@ -1,7 +1,7 @@
 import { exec } from "./client";
 import { Message } from "../types";
 
-export const messageRepository = {
+export const MessageRepository = {
   create(message: string): Promise<Message | undefined> {
     return exec<Message>((prisma) =>
       prisma.message.create({

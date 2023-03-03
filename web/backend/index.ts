@@ -1,4 +1,3 @@
-// @ts-check
 import { join, resolve } from "path";
 import { readFileSync } from "fs";
 import express, { Express } from "express";
