@@ -1,5 +1,5 @@
 import { IndexTable, LegacyCard } from "@shopify/polaris";
-import { Message } from "./MessageForm";
+import { Message } from "../../@types/message";
 import { MessageListItem } from "./MessageListItem";
 
 export interface MessagesListProps {

@@ -31,12 +31,7 @@ import {
   Field,
 } from "@shopify/react-form/build/ts";
 import { EditorRef, HtmlEditor } from "./HtmlEditor";
-
-export interface Message {
-  id: number;
-  description: string;
-  createdAt: Date;
-}
+import { Message } from "../../@types/message";
 
 export const MessageForm = (props: { message?: Message }): JSX.Element => {
   const { message: initialMessage } = props;

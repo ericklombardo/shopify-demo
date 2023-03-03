@@ -1,4 +1,4 @@
-import { Message } from "./MessageForm";
+import { Message } from "../../@types/message";
 import { useNavigate } from "@shopify/app-bridge-react";
 import { Button, ButtonGroup, IndexTable } from "@shopify/polaris";
 import { DeleteMinor, EditMinor } from "@shopify/polaris-icons";
