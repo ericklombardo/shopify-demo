@@ -15,3 +15,10 @@ model Message {
   createdAt     DateTime @default(now())
   description   String
 }
+
+model Session {
+  id      String @id @unique
+  shop    String
+  session String
+  @@index([id])
+}
