@@ -4,8 +4,8 @@ import express, { Express } from "express";
 import serveStatic from "serve-static";
 
 import shopify from "./shopify";
-import productCreator from "./product-creator";
 import GDPRWebhookHandlers from "./gdpr";
+import { applyMessagesApiEndpoints } from "./middleware/messages-api";
 
 const PORT = parseInt(
   (process.env.BACKEND_PORT as string) || (process.env.PORT as string),
@@ -36,26 +36,7 @@ app.use("/api/*", shopify.validateAuthenticatedSession());
 
 app.use(express.json());
 
-app.get("/api/products/count", async (_req, res) => {
-  const countData = await shopify.api.rest.Product.count({
-    session: res.locals.shopify.session,
-  });
-  res.status(200).send(countData);
-});
-
-app.get("/api/products/create", async (_req, res) => {
-  let status = 200;
-  let error = null;
-
-  try {
-    await productCreator(res.locals.shopify.session);
-  } catch (e: any) {
-    console.log(`Failed to process products/create: ${e.message}`);
-    status = 500;
-    error = e.message;
-  }
-  res.status(status).send({ success: status === 200, error });
-});
+applyMessagesApiEndpoints(app);
 
 app.use(serveStatic(STATIC_PATH, { index: false }));
 

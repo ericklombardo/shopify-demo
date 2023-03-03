@@ -2,8 +2,6 @@ import express from "express";
 import { MessageRepository } from "../prisma/database";
 
 export const applyMessagesApiEndpoints = (app: express.Express) => {
-  app.use(express.json());
-
   app.get("/api/messages/:id", async (req, res) => {
     const { id } = req.params;
     const message = await MessageRepository.getById(parseInt(id, 10));
