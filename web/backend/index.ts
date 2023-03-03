@@ -4,7 +4,7 @@ import express, { Express } from "express";
 import serveStatic from "serve-static";
 
 import shopify from "./shopify";
-import GDPRWebhookHandlers from "./gdpr";
+import GDPRWebhookHandlers from "./webhooks/gdpr";
 import { applyMessagesApiEndpoints } from "./middleware/messages-api";
 
 const PORT = parseInt(
