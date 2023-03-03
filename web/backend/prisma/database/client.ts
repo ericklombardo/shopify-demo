@@ -7,8 +7,9 @@ export default prisma;
 export const exec = async <T>(cb: (client: PrismaClient) => Promise<T>) => {
   try {
     return cb(prisma);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
+    throw error;
   } finally {
     await prisma.$disconnect();
   }
