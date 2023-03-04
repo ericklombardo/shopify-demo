@@ -28,4 +28,4 @@ dist/
 extensions/*/build
 
 # Node library SQLite database
-web/db/database.sqlite
+web/db/
