@@ -27,16 +27,19 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
       onAction: () => console.log("Todo: implement bulk delete"),
     },
   ];
-  const renderRows = messages.map(({ id, description, createdAt }, index) => (
-    <MessageListItem
-      index={index}
-      selected={selectedResources.includes(String(id))}
-      id={id}
-      description={description}
-      createdAt={createdAt}
-      key={id}
-    />
-  ));
+  const renderRows = messages.map(
+    ({ id, description, createdAt, active }, index) => (
+      <MessageListItem
+        index={index}
+        active={active}
+        selected={selectedResources.includes(String(id))}
+        id={id}
+        description={description}
+        createdAt={createdAt}
+        key={id}
+      />
+    )
+  );
 
   return (
     <LegacyCard>
@@ -50,6 +53,19 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
         promotedBulkActions={promotedBulkActions}
         headings={[
           { title: "Description" },
+          {
+            id: "active",
+            title: (
+              <Text
+                as="span"
+                variant="bodySm"
+                fontWeight="medium"
+                alignment="center"
+              >
+                Status
+              </Text>
+            ),
+          },
           {
             id: "createdAt",
             title: (
