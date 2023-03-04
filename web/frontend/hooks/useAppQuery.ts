@@ -5,7 +5,7 @@ import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 interface UseAppQueryOptions<T> {
   url: string;
   fetchInit?: RequestInit;
-  reactQueryOptions: UseQueryOptions<T>;
+  reactQueryOptions?: UseQueryOptions<T>;
 }
 
 /**

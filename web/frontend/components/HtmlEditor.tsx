@@ -58,7 +58,6 @@ const HtmlEditorComponent = (
     editor.current.onChange = (content) => {
       if (txtArea.current) txtArea.current.value = content;
       onChange?.(content);
-      console.log("onChange", content);
     };
 
     if (onBlur) editor.current.onBlur = () => editor.current && onBlur();
