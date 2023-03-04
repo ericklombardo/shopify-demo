@@ -1,4 +1,9 @@
-import { IndexTable, LegacyCard } from "@shopify/polaris";
+import {
+  IndexTable,
+  LegacyCard,
+  Text,
+  useIndexResourceState,
+} from "@shopify/polaris";
 import { Message } from "../../@types/message";
 import { MessageListItem } from "./MessageListItem";
 
@@ -10,9 +15,22 @@ export interface MessagesListProps {
 export const MessageList = (props: MessagesListProps): JSX.Element => {
   const { messages, loading } = props;
   const resourceName = { singular: "message", plural: "messages" };
-
-  const renderRows = messages.map(({ id, description, createdAt }) => (
+  const { selectedResources, allResourcesSelected, handleSelectionChange } =
+    useIndexResourceState(messages, {
+      resourceIDResolver: (message) => String(message.id),
+    });
+  const promotedBulkActions = [
+    {
+      content: `Delete selected ${
+        selectedResources.length > 1 ? "messages" : "message"
+      }`,
+      onAction: () => console.log("Todo: implement bulk delete"),
+    },
+  ];
+  const renderRows = messages.map(({ id, description, createdAt }, index) => (
     <MessageListItem
+      index={index}
+      selected={selectedResources.includes(String(id))}
       id={id}
       description={description}
       createdAt={createdAt}
@@ -25,12 +43,27 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
       <IndexTable
         resourceName={resourceName}
         itemCount={messages.length}
+        onSelectionChange={handleSelectionChange}
+        selectedItemsCount={
+          allResourcesSelected ? "All" : selectedResources.length
+        }
+        promotedBulkActions={promotedBulkActions}
         headings={[
           { title: "Description" },
-          { title: "Date created" },
-          { title: "Actions" },
+          {
+            id: "createdAt",
+            title: (
+              <Text
+                as="span"
+                variant="bodySm"
+                fontWeight="medium"
+                alignment="end"
+              >
+                Date created
+              </Text>
+            ),
+          },
         ]}
-        selectable={false}
         loading={loading}
       >
         {renderRows}
