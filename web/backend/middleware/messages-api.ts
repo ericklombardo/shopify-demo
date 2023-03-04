@@ -15,7 +15,7 @@ export const applyMessagesApiEndpoints = (app: express.Express) => {
 
   app.post("/api/messages", async (req, res) => {
     const { message } = req.body;
-    const newMessage = await MessageRepository.create(message);
+    const newMessage = await MessageRepository.create(message.description);
     res.status(200).send(newMessage);
   });
 
@@ -24,7 +24,7 @@ export const applyMessagesApiEndpoints = (app: express.Express) => {
     const { message } = req.body;
     const updatedMessage = await MessageRepository.update(
       parseInt(id, 10),
-      message
+      message.description
     );
     res.status(200).send(updatedMessage);
   });
