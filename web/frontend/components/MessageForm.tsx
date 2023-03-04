@@ -1,30 +1,8 @@
 import { useState, useCallback, useRef } from "react";
-import {
-  Banner,
-  Card,
-  Form,
-  FormLayout,
-  InlineError,
-  TextField,
-  Button,
-  ChoiceList,
-  Select,
-  Thumbnail,
-  Icon,
-  Stack,
-  TextStyle,
-  Layout,
-  EmptyState,
-} from "@shopify/polaris";
-import {
-  ContextualSaveBar,
-  ResourcePicker,
-  useAppBridge,
-  useNavigate,
-} from "@shopify/app-bridge-react";
-import { ImageMajor, AlertMinor } from "@shopify/polaris-icons";
-import { useAuthenticatedFetch, useAppQuery } from "../hooks";
-import { useForm, useField, notEmptyString } from "@shopify/react-form";
+import { Card, Form, FormLayout, Stack, Layout } from "@shopify/polaris";
+import { ContextualSaveBar, useNavigate } from "@shopify/app-bridge-react";
+import { useAuthenticatedFetch } from "../hooks";
+import { useForm, useField } from "@shopify/react-form";
 import {
   SubmitHandler,
   FormMapping,
@@ -41,24 +19,46 @@ export const MessageForm = (props: { message?: Message }): JSX.Element => {
   const maxCharCount = useRef<number>(50);
 
   const navigate = useNavigate();
-  const appBridge = useAppBridge();
   const fetch = useAuthenticatedFetch();
 
   const onSubmit: SubmitHandler<
     FormMapping<{ description: Field<string> }, "value">
-  > = (body: Message) => {
-    console.log("submit", body);
-    return Promise.resolve({ status: "success" });
-  };
-
-  const isDeleting = false;
-  const deleteMessage = () => console.log("delete");
+  > = useCallback(
+    async (body: Message) => {
+      console.log("submit", body);
+      const id = message?.id;
+      const isNew = !id;
+      const url = isNew ? "/api/messages" : `/api/messages/${id}`;
+      const method = isNew ? "POST" : "PATCH";
+      const response = await fetch(url, {
+        method,
+        body: JSON.stringify({ message: body }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        makeClean();
+        const responseMessage = await response.json();
+        /* if this is a new message, then save it and navigate to the edit page;
+           this behavior is the standard when saving resources in the Shopify admin
+         */
+        if (isNew) {
+          navigate(`/messages/${responseMessage.id}`);
+          /* if this is a message update, then set the message state in this component */
+        } else {
+          setMessage(responseMessage);
+        }
+      }
+      return { status: "success" };
+    },
+    [message]
+  );
 
   const {
     reset,
     submitting,
     submit,
     dirty,
+    makeClean,
     fields: { description },
   } = useForm({
     fields: {
