@@ -7,8 +7,9 @@ import {
   Layout,
 } from "@shopify/polaris";
 import { TitleBar, Loading, useNavigate } from "@shopify/app-bridge-react";
-import { Message, MessageList } from "../components";
-import dayjs from "dayjs";
+import { MessageList } from "../components";
+import { Message } from "../../@types/message";
+import { useAppQuery } from "../hooks";
 
 const LoadingElement = (): JSX.Element => (
   <Card sectioned>
@@ -41,38 +42,13 @@ const EmptyStateElement = (): JSX.Element => {
 export default function HomePage(): JSX.Element {
   const navigate = useNavigate();
 
-  /*
-    These are mock values. Setting these values lets you preview the loading markup and the empty state.
-  */
-  const isLoading = false;
-  const isRefetching = false;
-  const messages: Message[] = [
-    {
-      id: 1,
-      description: "<p><strong>Thank you for your order 1</strong></p>",
-      createdAt: dayjs().add(-1, "day").toDate(),
-    },
-    {
-      id: 2,
-      description: "<p>Thank you for your order 2</p>",
-      createdAt: dayjs().add(-2, "day").toDate(),
-    },
-    {
-      id: 3,
-      description: "<p>Thank you for your order 3</p>",
-      createdAt: dayjs().add(-3, "day").toDate(),
-    },
-    {
-      id: 4,
-      description: "<p>Thank you for your order 4</p>",
-      createdAt: new Date(),
-    },
-    {
-      id: 5,
-      description: "Thank you for your order 5",
-      createdAt: dayjs().add(1, "day").toDate(),
-    },
-  ];
+  const {
+    data: messages = [],
+    isLoading,
+    isRefetching,
+  } = useAppQuery<Message[]>({
+    url: "/api/messages",
+  });
 
   return (
     <Page>
@@ -86,7 +62,7 @@ export default function HomePage(): JSX.Element {
       <Layout>
         <Layout.Section>
           {isLoading && <LoadingElement />}
-          {messages.length && (
+          {messages.length > 0 && (
             <MessageList messages={messages} loading={isRefetching} />
           )}
           {!isLoading && !messages.length && <EmptyStateElement />}
