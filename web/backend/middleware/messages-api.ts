@@ -1,6 +1,13 @@
 import express from "express";
 import { MessageRepository } from "../prisma/database";
 
+export const applyPublicApiEndpoints = (app: express.Express) => {
+  app.get("/api/messages/latest", async (_req, res) => {
+    const message = await MessageRepository.getLatestMessage();
+    res.status(200).send(message);
+  });
+};
+
 export const applyMessagesApiEndpoints = (app: express.Express) => {
   app.get("/api/messages/:id", async (req, res) => {
     const { id } = req.params;

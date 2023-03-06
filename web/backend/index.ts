@@ -5,7 +5,7 @@ import serveStatic from "serve-static";
 
 import shopify from "./shopify";
 import GDPRWebhookHandlers from "./webhooks/gdpr";
-import { applyMessagesApiEndpoints } from "./middleware/messages-api";
+import { applyMessagesApiEndpoints, applyPublicApiEndpoints } from "./middleware/messages-api";
 
 const PORT = parseInt(
   (process.env.BACKEND_PORT as string) || (process.env.PORT as string),
@@ -31,10 +31,13 @@ app.post(
   shopify.processWebhooks({ webhookHandlers: GDPRWebhookHandlers })
 );
 
+app.use(express.json());
+
+// Set up public API endpoints
+applyPublicApiEndpoints(app);
+
 // All endpoints after this point will require an active session
 app.use("/api/*", shopify.validateAuthenticatedSession());
-
-app.use(express.json());
 
 applyMessagesApiEndpoints(app);
 
