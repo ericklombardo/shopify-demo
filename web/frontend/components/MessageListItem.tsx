@@ -1,6 +1,6 @@
 import { Message } from "../../@types/message";
 import { useNavigate } from "@shopify/app-bridge-react";
-import { IndexTable, Text, UnstyledLink, Badge } from "@shopify/polaris";
+import { IndexTable, Text, UnstyledLink } from "@shopify/polaris";
 import dayjs from "dayjs";
 import { stripHtmlFromText, truncate } from "../utils";
 
@@ -10,7 +10,7 @@ interface MessageListItemProps extends Message {
 }
 
 export const MessageListItem = (props: MessageListItemProps): JSX.Element => {
-  const { index, selected, id, description, createdAt, active } = props;
+  const { index, selected, id, description, createdAt } = props;
   const navigate = useNavigate();
 
   return (
@@ -24,13 +24,6 @@ export const MessageListItem = (props: MessageListItemProps): JSX.Element => {
         <UnstyledLink url={`/messages/${id}`}>
           {truncate(stripHtmlFromText(description), 50)}
         </UnstyledLink>
-      </IndexTable.Cell>
-      <IndexTable.Cell>
-        <Text as="span" variant="bodySm" fontWeight="medium" alignment="center">
-          <Badge status={active ? "success" : "warning"}>
-            {active ? "Active" : "Inactive"}
-          </Badge>
-        </Text>
       </IndexTable.Cell>
       <IndexTable.Cell>
         <Text as="span" variant="bodySm" fontWeight="medium" alignment="end">

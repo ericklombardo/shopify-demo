@@ -54,19 +54,6 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
         headings={[
           { title: "Description" },
           {
-            id: "active",
-            title: (
-              <Text
-                as="span"
-                variant="bodySm"
-                fontWeight="medium"
-                alignment="center"
-              >
-                Status
-              </Text>
-            ),
-          },
-          {
             id: "createdAt",
             title: (
               <Text
