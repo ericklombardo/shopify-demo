@@ -3,17 +3,24 @@ import {
   useExtensionApi,
   render,
   Banner,
+  useBuyerJourneyCompleted,
   useTranslate,
-} from '@shopify/checkout-ui-extensions-react';
+  View,
+} from "@shopify/checkout-ui-extensions-react";
 
 render('Checkout::Dynamic::Render', () => <App />);
 
 function App() {
-  const {extensionPoint} = useExtensionApi();
+  const {extensionPoint } = useExtensionApi();
   const translate = useTranslate();
-  return (
-    <Banner title="my-checkout-ui-extension">
-      {translate('welcome', {extensionPoint})}
-    </Banner>
-  );
+  // Returns true if the customer has completed the checkout
+  const buyerJourneyCompleted = useBuyerJourneyCompleted();
+
+  if (buyerJourneyCompleted) {
+    return (
+      <View>testing</View>
+    );
+  }
+
+  return null;
 }
