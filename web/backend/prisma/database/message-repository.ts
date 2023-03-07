@@ -2,11 +2,12 @@ import { exec } from "./client";
 import { Message } from "../types";
 
 export const MessageRepository = {
-  create(message: string): Promise<Message | undefined> {
+  create(message: string, shop: string): Promise<Message | undefined> {
     return exec<Message>((prisma) =>
       prisma.message.create({
         data: {
           description: message,
+          shop,
         },
       })
     );
@@ -29,18 +30,22 @@ export const MessageRepository = {
       prisma.message.findUnique({ where: { id } })
     );
   },
-  getAll(): Promise<Message[] | undefined> {
+  getAll(shop: string): Promise<Message[] | undefined> {
     return exec<Message[]>((prisma) =>
       prisma.message.findMany({
         orderBy: {
           createdAt: "desc",
         },
+        where: {
+          shop,
+        },
       })
     );
   },
-  getLatestMessage(): Promise<Message | null | undefined> {
+  getLatestMessage(shop: string): Promise<Message | null | undefined> {
     return exec<Message | null>((prisma) =>
       prisma.message.findFirst({
+        where: { shop },
         orderBy: {
           createdAt: "desc",
         },

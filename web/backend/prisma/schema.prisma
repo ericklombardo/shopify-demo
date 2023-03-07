@@ -15,6 +15,7 @@ model Message {
   createdAt     DateTime @default(now())
   description   String
   active        Boolean  @default(false)
+  shop          String   @default("")
 }
 
 model Session {
