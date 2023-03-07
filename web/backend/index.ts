@@ -5,7 +5,11 @@ import serveStatic from "serve-static";
 
 import shopify from "./shopify";
 import GDPRWebhookHandlers from "./webhooks/gdpr";
-import { applyMessagesApiEndpoints, applyPublicApiEndpoints } from "./middleware/messages-api";
+import {
+  applyMessagesApiEndpoints,
+  applyPublicApiEndpoints,
+} from "./middleware/messages-api";
+import { installScriptTags } from "./script-tags";
 
 const PORT = parseInt(
   (process.env.BACKEND_PORT as string) || (process.env.PORT as string),
@@ -43,7 +47,10 @@ applyMessagesApiEndpoints(app);
 
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
-app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res) => {
+  const url = new URL(`https://${_req.get("host")}${_req.originalUrl}`);
+  console.log(`Installing script tags for ${url.origin}`);
+  await installScriptTags(_req.query.shop as string, url.origin);
   return res
     .status(200)
     .set("Content-Type", "text/html")
