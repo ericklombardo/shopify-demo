@@ -1,6 +1,6 @@
 (() => {
   const installer = {
-    appUrl: "https://266c-190-150-26-24.ngrok.io",
+    appUrl: "https://thank-you.fly.dev",
 
     mainElement: document.getElementsByClassName("main")?.[0],
 

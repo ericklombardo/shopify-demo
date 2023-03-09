@@ -3,7 +3,8 @@
 
 # Environment Configuration
 .env
-.env.*
+
+fly.toml
 
 # Dependency directory
 node_modules
