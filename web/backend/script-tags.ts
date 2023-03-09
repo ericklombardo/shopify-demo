@@ -4,6 +4,10 @@ import { SessionRepository } from "./prisma/database";
 export const installScriptTags = async (shop: string, url: string) => {
   const scriptSrc = `${url}/assets/js/order-status.js`;
   const session = (await SessionRepository.findSessionsByShop(shop))[0];
+  if (!session) {
+    console.log(`No session found for ${shop}`);
+    return;
+  }
   console.log(`Getting script tags for ${shop} at ${scriptSrc}`);
   const scriptTags = await shopify.api.rest.ScriptTag.all({
     session,
