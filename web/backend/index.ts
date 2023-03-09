@@ -18,7 +18,7 @@ const PORT = parseInt(
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
-    ? `${process.cwd()}/frontend/dist`
+    ? resolve(process.cwd(), "../frontend/dist")
     : resolve(process.cwd(), "../frontend");
 
 const app: Express = express();
