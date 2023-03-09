@@ -13,6 +13,8 @@ COPY web/@types @types
 COPY web/frontend frontend
 RUN npm --prefix ./frontend run build
 
+COPY web/frontend/assets frontend/dist/assets
+
 COPY web/backend backend
 RUN npm --prefix ./backend run prepare
 RUN npm --prefix ./backend run build
