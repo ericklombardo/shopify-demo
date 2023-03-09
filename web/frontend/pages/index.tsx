@@ -46,6 +46,7 @@ export default function HomePage(): JSX.Element {
     data: messages = [],
     isLoading,
     isRefetching,
+    refetch,
   } = useAppQuery<Message[]>({
     url: "/api/messages",
   });
@@ -63,7 +64,11 @@ export default function HomePage(): JSX.Element {
         <Layout.Section>
           {isLoading && <LoadingElement />}
           {messages.length > 0 && (
-            <MessageList messages={messages} loading={isRefetching} />
+            <MessageList
+              messages={messages}
+              loading={isRefetching}
+              onRefresh={refetch}
+            />
           )}
           {!isLoading && !messages.length && <EmptyStateElement />}
         </Layout.Section>

@@ -4,7 +4,7 @@ import { IndexTable, Text, UnstyledLink } from "@shopify/polaris";
 import dayjs from "dayjs";
 import { stripHtmlFromText, truncate } from "../utils";
 
-interface MessageListItemProps extends Message {
+interface MessageListItemProps extends Omit<Message, "shop"> {
   index: number;
   selected: boolean;
 }

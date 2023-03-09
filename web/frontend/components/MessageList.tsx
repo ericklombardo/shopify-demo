@@ -6,25 +6,33 @@ import {
 } from "@shopify/polaris";
 import { Message } from "../../@types/message";
 import { MessageListItem } from "./MessageListItem";
+import { DeleteMessagesModal } from "./DeleteMessagesModal";
+import { useCallback, useState } from "react";
 
 export interface MessagesListProps {
   messages: Message[];
   loading: boolean;
+  onRefresh?(): void;
 }
 
 export const MessageList = (props: MessagesListProps): JSX.Element => {
-  const { messages, loading } = props;
+  const { messages, loading, onRefresh } = props;
   const resourceName = { singular: "message", plural: "messages" };
-  const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(messages, {
-      resourceIDResolver: (message) => String(message.id),
-    });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const {
+    selectedResources,
+    allResourcesSelected,
+    handleSelectionChange,
+    clearSelection,
+  } = useIndexResourceState(messages, {
+    resourceIDResolver: (message) => String(message.id),
+  });
   const promotedBulkActions = [
     {
       content: `Delete selected ${
         selectedResources.length > 1 ? "messages" : "message"
       }`,
-      onAction: () => console.log("Todo: implement bulk delete"),
+      onAction: () => setIsDeleteModalOpen(true),
     },
   ];
   const renderRows = messages.map(
@@ -41,36 +49,58 @@ export const MessageList = (props: MessagesListProps): JSX.Element => {
     )
   );
 
+  const handleOnCloseModal = useCallback(() => {
+    setIsDeleteModalOpen(false);
+  }, []);
+
+  const handleOnDeleted = useCallback(
+    (success: boolean) => {
+      if (success) {
+        clearSelection();
+        onRefresh?.();
+      }
+    },
+    [onRefresh]
+  );
+
   return (
-    <LegacyCard>
-      <IndexTable
-        resourceName={resourceName}
-        itemCount={messages.length}
-        onSelectionChange={handleSelectionChange}
-        selectedItemsCount={
-          allResourcesSelected ? "All" : selectedResources.length
-        }
-        promotedBulkActions={promotedBulkActions}
-        headings={[
-          { title: "Description" },
-          {
-            id: "createdAt",
-            title: (
-              <Text
-                as="span"
-                variant="bodySm"
-                fontWeight="medium"
-                alignment="end"
-              >
-                Date created
-              </Text>
-            ),
-          },
-        ]}
-        loading={loading}
-      >
-        {renderRows}
-      </IndexTable>
-    </LegacyCard>
+    <>
+      <DeleteMessagesModal
+        open={isDeleteModalOpen}
+        selectedMessages={selectedResources}
+        onClose={handleOnCloseModal}
+        onDeleted={handleOnDeleted}
+      />
+      <LegacyCard>
+        <IndexTable
+          resourceName={resourceName}
+          itemCount={messages.length}
+          onSelectionChange={handleSelectionChange}
+          selectedItemsCount={
+            allResourcesSelected ? "All" : selectedResources.length
+          }
+          promotedBulkActions={promotedBulkActions}
+          headings={[
+            { title: "Description" },
+            {
+              id: "createdAt",
+              title: (
+                <Text
+                  as="span"
+                  variant="bodySm"
+                  fontWeight="medium"
+                  alignment="end"
+                >
+                  Date created
+                </Text>
+              ),
+            },
+          ]}
+          loading={loading}
+        >
+          {renderRows}
+        </IndexTable>
+      </LegacyCard>
+    </>
   );
 };

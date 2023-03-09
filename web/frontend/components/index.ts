@@ -4,3 +4,4 @@ export * from "./providers";
 export * from "./MessageList";
 export * from "./HtmlViewer";
 export * from "./MessageListItem";
+export * from "./DeleteMessagesModal";
