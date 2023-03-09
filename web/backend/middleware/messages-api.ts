@@ -42,4 +42,10 @@ export const applyMessagesApiEndpoints = (app: express.Express) => {
     );
     res.status(200).send(updatedMessage);
   });
+
+  app.delete("/api/messages", async (req, res) => {
+    const { ids } = req.body;
+    const deletedCount = await MessageRepository.deleteByIds(ids);
+    res.status(200).send({ deletedCount });
+  });
 };

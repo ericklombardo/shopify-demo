@@ -25,6 +25,11 @@ export const MessageRepository = {
   delete(id: number): Promise<Message | undefined> {
     return exec<Message>((prisma) => prisma.message.delete({ where: { id } }));
   },
+  deleteByIds(ids: number[]): Promise<number> {
+    return exec((prisma) =>
+      prisma.message.deleteMany({ where: { id: { in: ids } } })
+    ).then(({ count }) => count);
+  },
   getById(id: number): Promise<Message | null | undefined> {
     return exec<Message | null>((prisma) =>
       prisma.message.findUnique({ where: { id } })
