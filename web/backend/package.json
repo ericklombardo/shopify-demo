@@ -5,9 +5,12 @@
   "scripts": {
     "debug": "node --inspect-brk index.ts",
     "build": "tsc --skipLibCheck",
+    "prepare": "npx prisma generate",
     "dev": "cross-env NODE_ENV=development nodemon --experimental-specifier-resolution=node index.ts --ignore ../frontend",
-    "migration:run:dev": "prisma migrate dev --name",
-    "serve": "cross-env NODE_ENV=production node dist/index.js",
+    "migration:run:dev": "npx prisma migrate dev --name",
+    "migration:deploy": "npx prisma migrate deploy",
+    "serve": "cross-env NODE_ENV=production node --experimental-specifier-resolution=node dist/index.js",
+    "start": "npm run migration:deploy && npm run serve",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint -- --fix"
   },
